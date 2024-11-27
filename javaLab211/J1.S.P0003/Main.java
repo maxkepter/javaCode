@@ -1,83 +1,65 @@
-
 import java.util.Scanner;
 
-/**
- *
- * @author THAYCACAC
- */
-public class Main0 {
+public class Main {
+    private static Scanner in = new Scanner(System.in);
 
-    private static final Scanner in = new Scanner(System.in);
-
-    //check user input a number integer
     private static int checkInputInt() {
-        //loop until user input correct
         while (true) {
             try {
                 int result = Integer.parseInt(in.nextLine().trim());
+                if (result < 1) {
+                    throw new NumberFormatException();
+                }
                 return result;
             } catch (NumberFormatException e) {
-                System.err.println("Please input number");
-                System.out.print("Enter again: ");
+                System.out.println("Invalid input enter again: ");
             }
         }
     }
-//allow user input number of array
 
-    private static int inputSizeOfArray() {
-        System.out.print("Enter number of array: ");
-        int n = checkInputInt();
-        return n;
-    }
-    //allow user input value of array
-
-    private static int[] inputValueOfArray(int n) {
+    private static int[] generateArray(int n) {
         int[] a = new int[n];
         for (int i = 0; i < n; i++) {
-            System.out.print("Enter a[" + i + "]: ");
-            a[i] = checkInputInt();
+            a[i] = (int) (Math.random() * 100 + 1);
         }
         return a;
     }
 
-    //sort array by bubble sort
-    private static void sortArrayByInsectionSort(int[] a) {
-        int len = a.length;
-        System.out.print("Unsorted array: ");
-        for (int i = 0; i < len; i++) {
-            System.out.print(a[i] + " ");
+    private static void displayArray(int[] arr) {
+        System.out.print(arr[0]);
+        for (int i = 1; i < arr.length; i++) {
+            System.out.print(", " + arr[i]);
         }
-        for (int i = 1; i < len; i++) {
-            for (int j = i; j < len; j++) {
-                if (a[j] < a[j - 1]) {
-                    int temp = a[j];
-                    a[j] = a[j - 1];
-                    a[j - 1] = temp;
-                }
-            }
-        }
-        System.out.println();
     }
 
-    //display array after sort
-    private static void print(int[] a) {
-        System.out.print("Sorted array: ");
-        for (int i = 0; i < a.length; i++) {
-            System.out.print(a[i] + " ");
+    private static void insertionSort(int[] arr) {
+        System.out.print("Unsorted array: [");
+        displayArray(arr);
+        System.out.println("]");
+        for (int i = 1; i < arr.length; i++) {
+            int tempIndex = i;
+            while (arr[tempIndex] < arr[tempIndex - 1]) {
+
+                int temp = arr[tempIndex];
+                arr[tempIndex] = arr[tempIndex - 1];
+                arr[tempIndex - 1] = temp;
+                tempIndex--;
+                if (tempIndex < 1) {
+                    break;
+                }
+            }
+
         }
     }
 
     public static void main(String[] args) {
-        int n = inputSizeOfArray();
-        int[] a = inputValueOfArray(n);
-        sortArrayByInsectionSort(a);
-        print(a);
-    }
+        System.out.println("Enter number of array");
+        int numArr = checkInputInt();
+        int[] arr = generateArray(numArr);
+        insertionSort(arr);
+        System.out.print("Sorted array: [");
 
-    // 7 -5 2 16 4
-    // -5 7 2 16 4
-    // -5 2 7 16 4
-    // -5 2 7 16 4
-    // -5 2 7 4 16
-    //...
+        displayArray(arr);
+        System.out.println("]");
+    }
 }

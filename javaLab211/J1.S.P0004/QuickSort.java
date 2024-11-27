@@ -1,80 +1,74 @@
-import java.util.Random;
 import java.util.Scanner;
 
-/**
- *
- * @author THAYCACAC
- */
 public class QuickSort {
+    private static Scanner in = new Scanner(System.in);
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter number of array:");
-        int length = scanner.nextInt();
-        int[] array = new int[length];
-        for (int i = 0; i < length; i++) {
-            array[i] = new Random().nextInt(length);
-        }
-        QuickSort sorter = new QuickSort();
-        
-        System.out.print("Unsorted array: ");
-        sorter.displayArray(array);
-        
-        System.out.println();
-        
-        sorter.quickSort(array, 0, length - 1);
-        System.out.print("Sorted array: ");
-        sorter.displayArray(array);
-    }
-
-    /**
-     *
-     * @param arr the array
-     */
-    public void displayArray(int[] arr) {
-        System.out.print("[");
-        for (int i = 0; i < arr.length; i++) {
-            System.out.print(arr[i]);
-            if (i < arr.length - 1) {
-                System.out.print(", ");
+    private static int checkInputInt() {
+        while (true) {
+            try {
+                int result = Integer.parseInt(in.nextLine().trim());
+                if (result < 1) {
+                    throw new NumberFormatException();
+                }
+                return result;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input enter again: ");
             }
         }
-        System.out.print("]");
     }
 
-    int partition(int arr[], int left, int right) {
-        int i = left, j = right;
-        int tmp;
-        int pivot = arr[(left + right) / 2];
+    private static int[] generateArray(int n) {
+        int[] a = new int[n];
+        for (int i = 0; i < n; i++) {
+            a[i] = (int) (Math.random() * 100 + 1);
+        }
+        return a;
+    }
 
-        while (i <= j) {
-            while (arr[i] < pivot) {
+    private static void displayArray(int[] arr) {
+        System.out.print(arr[0]);
+        for (int i = 1; i < arr.length; i++) {
+            System.out.print(", " + arr[i]);
+        }
+    }
+
+    private static void quickSort(int[] arr, int l, int r) {
+        int p = arr[(l + r) / 2];
+        int i = l, j = r;
+        while (i < j) {
+            while (arr[i] < p) {
                 i++;
             }
-            while (arr[j] > pivot) {
+            while (arr[j] > p) {
                 j--;
             }
             if (i <= j) {
-                tmp = arr[i];
+                int temp = arr[i];
                 arr[i] = arr[j];
-                arr[j] = tmp;
+                arr[j] = temp;
                 i++;
                 j--;
             }
-        };
-        return i;
+        }
+        if (i < r) {
+            quickSort(arr, i, r);
+        }
+        if (j > l) {
+            quickSort(arr, l, j);
+        }
+
     }
 
-    void quickSort(int arr[], int left, int right) {
-        int index = partition(arr, left, right);
-        if (left < index - 1) {
-            quickSort(arr, left, index - 1);
-        }
-        if (index < right) {
-            quickSort(arr, index, right);
-        }
+    public static void main(String[] args) {
+        System.out.println("Enter number of array");
+        int numArr = checkInputInt();
+        int[] arr = generateArray(numArr);
+        System.out.print("Unsorted array: [");
+        displayArray(arr);
+        System.out.println("]");
+        quickSort(arr, 0, arr.length - 1);
+        System.out.print("Sorted array: [");
+        displayArray(arr);
+        System.out.println("]");
     }
 }
