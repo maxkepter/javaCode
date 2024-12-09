@@ -1,93 +1,90 @@
-import java.util.Random;
 import java.util.Scanner;
 
-/**
- *
- * @author THAYCACAC
- */
 public class MergeSort {
+    private static Scanner in = new Scanner(System.in);
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter number of array:");
-        int length = scanner.nextInt();
-        int[] array = new int[length];
-        for (int i = 0; i < length; i++) {
-            array[i] = new Random().nextInt(length);
-        }
-        MergeSort sorter = new MergeSort();
-
-        System.out.print("Unsorted array: ");
-        sorter.displayArray(array);
-
-        System.out.println();
-
-        sorter.sort(array);
-        System.out.print("Sorted array: ");
-        sorter.displayArray(array);
-    }
-
-    /**
-     *
-     * @param arr the array
-     */
-    public void displayArray(int[] arr) {
-        System.out.print("[");
-        for (int i = 0; i < arr.length; i++) {
-            System.out.print(arr[i]);
-            if (i < arr.length - 1) {
-                System.out.print(", ");
+    private static int checkInputInt() {
+        while (true) {
+            try {
+                int result = Integer.parseInt(in.nextLine().trim());
+                if (result < 1) {
+                    throw new NumberFormatException();
+                }
+                return result;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input enter again: ");
             }
         }
-        System.out.print("]");
     }
 
-    private int[] array;
-    private int[] tempMergArr;
-    private int length;
-
-    public void sort(int inputArr[]) {
-        this.array = inputArr;
-        this.length = inputArr.length;
-        this.tempMergArr = new int[length];
-        doMergeSort(0, length - 1);
+    private static int[] generateArray(int n) {
+        int[] a = new int[n];
+        for (int i = 0; i < n; i++) {
+            a[i] = (int) (Math.random() * 100 + 1);
+        }
+        return a;
     }
 
-    private void doMergeSort(int lowerIndex, int higherIndex) {
-
-        if (lowerIndex < higherIndex) {
-            int middle = lowerIndex + (higherIndex - lowerIndex) / 2;
-            // Below step sorts the left side of the array
-            doMergeSort(lowerIndex, middle);
-            // Below step sorts the right side of the array
-            doMergeSort(middle + 1, higherIndex);
-            // Now merge both sides
-            mergeParts(lowerIndex, middle, higherIndex);
+    private static void displayArray(int[] arr) {
+        System.out.print(arr[0]);
+        for (int i = 1; i < arr.length; i++) {
+            System.out.print(", " + arr[i]);
         }
     }
 
-    private void mergeParts(int lowerIndex, int middle, int higherIndex) {
-
-        for (int i = lowerIndex; i <= higherIndex; i++) {
-            tempMergArr[i] = array[i];
+    public static void mergeSort(int[] a, int l, int r) {
+        if (l < r) {
+            int mid = (l + r) / 2;
+            mergeSort(a, l, mid);
+            mergeSort(a, mid + 1, r);
+            merge(a, l, mid, r);
         }
-        int i = lowerIndex;
-        int j = middle + 1;
-        int k = lowerIndex;
-        while (i <= middle && j <= higherIndex) {
-            if (tempMergArr[i] <= tempMergArr[j]) {
-                array[k] = tempMergArr[i];
+    }
+
+    private static void merge(int[] a, int l, int mid, int r) {
+        int[] leftArr = new int[mid - l + 1];
+        int[] rightArr = new int[r - mid];
+        for (int i = 0; i < leftArr.length; i++) {
+            leftArr[i] = a[l + i];
+        }
+        for (int i = 0; i < rightArr.length; i++) {
+            rightArr[i] = a[mid + i + 1];
+        }
+        int i = 0, j = 0, k = l;
+        while (i < leftArr.length && j < rightArr.length) {
+            if (leftArr[i] <= rightArr[j]) {
+                a[k] = leftArr[i];
+                k++;
                 i++;
             } else {
-                array[k] = tempMergArr[j];
+                a[k] = rightArr[j];
+                k++;
                 j++;
             }
+        }
+        while (i < leftArr.length) {
+            a[k] = leftArr[i];
+            i++;
             k++;
         }
-        while (i <= middle) {
-            array[k] = tempMergArr[i];
+        while (j < rightArr.length) {
+            a[k] = rightArr[j];
+            j++;
             k++;
-            i++;
         }
     }
+
+    public static void main(String[] args) {
+        System.out.println("Enter number of array");
+        int numArr = checkInputInt();
+        int[] arr = generateArray(numArr);
+        System.out.print("Unsorted array: [");
+        displayArray(arr);
+        System.out.println("]");
+        mergeSort(arr, 0, arr.length - 1);
+        System.out.print("Sorted array: [");
+        displayArray(arr);
+        System.out.println("]");
+    }
+
 }

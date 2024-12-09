@@ -1,13 +1,10 @@
-package Manager;
 
-/**
- *
- * @author THAYCACAC
- */
+import Manager.Manager;
+
 public class Main {
 
     public static void main(String[] args) {
-        //loop until user want to exit
+        // loop until user want to exit
         while (true) {
             int choice = Manager.mennu();
             switch (choice) {
