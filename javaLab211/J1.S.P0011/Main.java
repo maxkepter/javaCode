@@ -1,30 +1,35 @@
-package J1.S.P0011;
+import java.util.Scanner;
 
-/**
- *
- * @author THAYCACAC
- */
 public class Main {
-
     public static void main(String[] args) {
-        //loop until user want to exit
+        Manager manager = new Manager();
+        Scanner sc = new Scanner(System.in);
+
         while (true) {
-            int choice = Manager.menu();
+            System.out.println("===== Converter Program =====");
+            System.out.println("1. Binary to other bases");
+            System.out.println("2. Decimal to other bases");
+            System.out.println("3. Hexadecimal to other bases");
+            System.out.println("4. Exit");
+            System.out.println("Enter your choice: ");
+            int choice = ValidateInput.checkIntputRange(1, 4);
+
             switch (choice) {
                 case 1:
-                    String binary = Validate.checkInputBinary();
-                    Manager.convertFromBinary(binary);
+                    manager.binaryConvert();
                     break;
                 case 2:
-                    String decimal = Validate.checkInputDecimal();
-                    Manager.convertFromDecimal(decimal);
+                    manager.decimalConvert();
                     break;
                 case 3:
-                    String hexa = Validate.checkInputHexaDecimal();
-                    Manager.convertFromHexa(hexa);
+                    manager.hexaConvert();
                     break;
                 case 4:
+                    System.out.println("Goodbye!");
+                    sc.close();
                     return;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
             }
         }
     }

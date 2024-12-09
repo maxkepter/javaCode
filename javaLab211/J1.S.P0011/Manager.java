@@ -1,124 +1,92 @@
-package J1.S.P0011;
-
-/**
- *
- * @author THAYCACAC
- */
 public class Manager {
-
-    public static final char[] hexDigits = {
-        '0', '1', '2', '3', '4', '5', '6', '7',
-        '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
+    private static final char[] hexDigits = {
+            '0', '1', '2', '3', '4', '5', '6', '7',
+            '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
     };
-    
-    //display menu
-    public static int menu(){
-        System.out.println("1. Convert From Binary.");
-        System.out.println("2. Convert From Decimal.");
-        System.out.println("3. Convert From Hexa.");
-        System.out.println("4. Exit");
-        System.out.print("Enter your choice: ");
-        int choice = Validate.checkInputIntLimit(1, 4);
-        return choice;
-    }
 
-    //display choose conver
-    public static int displayConvert(String from, String toCase1, String toCase2) {
-        System.out.println("1. Convert form " + from + " to " + toCase1);
-        System.out.println("2. Convert form " + from + " to " + toCase2);
-        System.out.print("Enter your choice: ");
-        int result = Validate.checkInputIntLimit(1, 2);
-        return result;
-    }
-
-    //allow user convert from binary
-    public static void convertFromBinary(String binary) {
-        int choice = displayConvert("binary", "decimal", "hexadecimal");
+    public void binaryConvert() {
+        System.out.println("1. Binary to Decimal");
+        System.out.println("2. Binary to Hexadecimal");
+        System.out.println("Enter your choice:");
+        String binary = ValidateInput.checkInputBianry();
+        int choice = ValidateInput.checkIntputRange(1, 2);
         switch (choice) {
             case 1:
-                System.out.println("Decimal: "
-                        + convertBinaryToDecimal(binary)
-                );
+                System.out.println("Decimal: " + binaryToDecimal(binary));
                 break;
             case 2:
-                System.out.println("Hexadecimal: "
-                        + convertBinaryToHexa(binary));
+                System.out.println("Hexadecimal: " + binaryToHexa(binary));
                 break;
         }
     }
 
-    //allow user convert from binary
-    public static void convertFromDecimal(String decimal) {
-        int choice = displayConvert("decimal", "binary", "hexadecimal");
+    public void decimalConvert() {
+        System.out.println("1. Decimal to Binary");
+        System.out.println("2. Decimal to Hexadecimal");
+        System.out.println("Enter your choice:");
+        String decimal = ValidateInput.checkInputDecimal();
+        int choice = ValidateInput.checkIntputRange(1, 2);
         switch (choice) {
             case 1:
-                System.out.println("Binary: "
-                        + convertDecimalToBinary(decimal)
-                );
+                System.out.println("Binary: " + decimalToBinary(decimal));
                 break;
             case 2:
-                System.out.println("Hexadecimal: "
-                        + convertDecimalToHexa(decimal));
+                System.out.println("Hexadecimal: " + decimalToHexa(decimal));
                 break;
         }
     }
 
-    //allow user convert from binary
-    public static void convertFromHexa(String hexa) {
-        int choice = displayConvert("hexa", "binary", "decimal");
+    public void hexaConvert() {
+        System.out.println("1. Hexadecimal to Binary");
+        System.out.println("2. Hexadecimal to Decimal");
+        System.out.println("Enter your choice:");
+        String hexa = ValidateInput.checkInputHexa();
+        int choice = ValidateInput.checkIntputRange(1, 2);
         switch (choice) {
             case 1:
-                System.out.println("Binary: "
-                        + convertHexaToBinary(hexa)
-                );
+                System.out.println("Binary: " + hexaToBinary(hexa));
                 break;
             case 2:
-                System.out.println("Decimal: "
-                        + convertHexaToDecimal(hexa));
+                System.out.println("Decimal: " + hexaToDecimal(hexa));
                 break;
         }
     }
 
-    //allow user convert from binary to decimal
-    public static String convertBinaryToDecimal(String binary) {
-        int decimal = Integer.parseInt(binary, 2);
-        return Integer.toString(decimal);
+    public String binaryToDecimal(String binary) {
+        Integer decimal = Integer.parseInt(binary, 2);
+        return decimal.toString();
     }
 
-    //allow user convert from binary to decimal
-    public static String convertBinaryToHexa(String binary) {
-        String decimal = convertBinaryToDecimal(binary);
-        String hexa = convertDecimalToHexa(decimal);
-        return hexa;
+    public String binaryToHexa(String binary) {
+        return decimalToHexa(binaryToDecimal(binary));
     }
 
-    //allow user convert from hexa to decimal
-    public static int convertHexaToDecimal(String hexadecimal) {
-        int decimal = Integer.parseInt(hexadecimal, 16);
-        return decimal;
+    public String decimalToBinary(String decimal) {
+        Integer deci = Integer.parseInt(decimal);
+        StringBuilder binary = new StringBuilder();
+        while (deci > 0) {
+            binary.append(deci % 2);
+            deci /= 2;
+        }
+        return binary.reverse().toString();
     }
 
-    //allow user convert from binary to decimal
-    public static String convertHexaToBinary(String hexadecimal) {
-        String binary = Integer.toBinaryString(convertHexaToDecimal(hexadecimal));
-        return binary;
-    }
-
-    //allow user convert from binary to decimal
-    public static String convertDecimalToBinary(String decimal) {
-        String binary = Integer.toBinaryString(Integer.parseInt(decimal));
-        return binary;
-    }
-
-    //allow user convert from decimal to hexa
-    public static String convertDecimalToHexa(String decimal) {
-        String hexa = "";
-        int deci = Integer.parseInt(decimal);
-        while (deci != 0) {
-            hexa = hexDigits[deci % 16] + hexa;
+    public String decimalToHexa(String decimal) {
+        Integer deci = Integer.parseInt(decimal);
+        StringBuilder hexa = new StringBuilder();
+        while (deci > 0) {
+            hexa.append(hexDigits[deci % 16]);
             deci /= 16;
         }
-        return hexa;
+        return hexa.reverse().toString();
     }
 
+    public String hexaToBinary(String hexa) {
+        return decimalToBinary(hexaToDecimal(hexa));
+    }
+
+    public String hexaToDecimal(String hexa) {
+        Integer decimal = Integer.parseInt(hexa, 16);
+        return decimal.toString();
+    }
 }
